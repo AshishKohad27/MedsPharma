@@ -6,28 +6,28 @@ import SimpleSlider from "../../components/Labtest/Slider";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Mainfooter/footer";
 
-function Booktest({ data }) {
-    
+function Booktest() {
+
   return (
     <Box>
-      <Navbar />
+      {/* <Navbar />
       <SimpleSlider />
       <Alltest data={data} />
       <FAQ />
       <OurPatients />
-      <Footer/>
+      <Footer/> */}
     </Box>
   );
 }
 
 export default Booktest;
 
-export async function getServerSideProps(context) {
-  const res = await fetch(`https://medspharma.netlify.app/api/labtests`);
-  const data = await res.json();
-  return {
-    props: {
-      data,
-    },
-  };
-}
+// export async function getServerSideProps(context) {
+//   const res = await fetch(`https://medspharma.netlify.app/api/labtests`);
+//   const data = await res.json();
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// }
