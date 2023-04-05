@@ -20,8 +20,7 @@ export default function OrderSuccess() {
     const authState = useSelector((state) => state.auth);
     const { loginCredential } = useSelector((state) => state.user);
     console.log('authState: ', authState);
-    const cart = useSelector((state) => state.cart);
-    console.log('cart: ', cart);
+    // const cart = useSelector((state) => state.cart);
     const [flag, setFlag] = useState(true);
 
     let id = setTimeout(() => {

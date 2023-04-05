@@ -19,7 +19,7 @@ import Footer from "../../components/Mainfooter/footer";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getSingleProduct } from "../../redux/product/action";
-import { addItemCart, getCart } from "../../redux/cart/action";
+import { addItemCart } from "../../redux/cart/action";
 import { CLEAR_CART_MESSAGE } from "../../redux/cart/type";
 import { getDetailsFromToken } from "../../redux/auth/user.action";
 
@@ -51,7 +51,7 @@ export default function Productdetails(params) {
     const toast = useToast();
 
     useEffect(() => {
-        if (message) {
+        if (message && message) {
             toast({
                 title: message,
                 status: error ? "error" : "success",

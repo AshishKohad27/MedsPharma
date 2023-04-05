@@ -25,9 +25,6 @@ import { deleteCart, getCart, patchCart } from "../../redux/cart/action";
 
 
 export default function WithCartItem({ item }) {
-    // console.log('item: ', item);
-    // console.log('item:', item.price)
-    const { data } = useSelector((state) => state.cart);
     const { loginCredential } = useSelector((state) => state.user);
     const [day, setDay] = useState("");
     const [month, setMonth] = useState("");

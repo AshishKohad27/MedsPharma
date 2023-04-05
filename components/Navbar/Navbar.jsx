@@ -164,7 +164,7 @@ export default function Navbar() {
                   Cart
                 </Button>
                 <Flex bg='red' w={'25px'} h="25px" borderRadius='50%' color='white' position={'absolute'} alignItems='center' justifyContent='center' mr={'-20px'} mt={'-20px'}>
-                  {data?.length}
+                  {data && data.length}
                 </Flex>
               </Box>
             </Link>
