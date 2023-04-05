@@ -188,7 +188,7 @@ export default function Navbar() {
             <Link href="/medicines">Medicines</Link>
           </Heading>
           <Heading fontWeight={500} size="xs">
-            <Link href="/labtests">Lab Tests</Link>
+            <Link href="#">Lab Tests</Link>
           </Heading>
           <Heading fontWeight={500} size="xs">
             <Menu>
@@ -456,7 +456,7 @@ const NAV_ITEMS = [
   },
   {
     label: "Lab Test",
-    href: "/medicines",
+    href: "#",
   },
   {
     label: "Healthcare",
