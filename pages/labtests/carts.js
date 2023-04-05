@@ -38,20 +38,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteLabcart, getLabcart, testBooking, updateLabcart } from "../../redux/labcart/action";
 
 function Cart() {
-    const dispatch = useDispatch();
-    const {data:state} = useSelector((state) => state.labcart);
+  const dispatch = useDispatch();
+  const { data: state } = useSelector((state) => state.labcart);
   const [product, setProduct] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: IsOpen, onOpen: OnOpen, onClose: OnClose } = useDisclosure();
   const cancelRef = useRef();
   const toast = useToast();
 
-  const authState = useSelector(state => state.auth)
-  console.log('authState: ', authState);
+  const {  loginCredential } = useSelector(state => state.user);
 
   useEffect(() => {
-   dispatch(getLabcart(authState.user.id))
-   }, [dispatch, authState.user])
+    dispatch(getLabcart(loginCredential._id))
+  }, [dispatch, loginCredential._id])
 
   return (
     <Box>
@@ -80,7 +79,7 @@ function Cart() {
                 colorScheme="red"
                 ml={3}
                 onClick={() => {
-                    dispatch(deleteLabcart(authState.user.id, product._id));
+                  dispatch(deleteLabcart(loginCredential._id, product._id));
                   onClose();
                   toast({
                     title: `${product?.testId.testName} `,
@@ -146,111 +145,111 @@ function Cart() {
                         <Text fontSize="13px" mt={1} fontWeight="600">
                           {item.testId.description}
                         </Text>
-                       
+
                         <Flex gap={1} alignItems="center">
                           <Text fontWeight="bold" fontSize="16px" mt="1">
-                          ₹{item.testId.price}
+                            ₹{item.testId.price}
                           </Text>
-                         
+
                         </Flex>
-                        <Flex 
-                        flexWrap={'wrap'}
-                        justifyContent="space-between" mt={2}>
+                        <Flex
+                          flexWrap={'wrap'}
+                          justifyContent="space-between" mt={2}>
 
-                        <Box>
+                          <Box>
 
-                        <Text 
-                            fontSize="11px" mt={1} fontWeight="600">
-                          <FontAwesomeIcon
-                            icon={faCheck}
-                            fontSize="13px"
-                            color="teal"
-                          />{" "}
-                          Booking Date <strong>
-                            {new Date(item.bookedDate).toDateString()}
-                          </strong>
-                        </Text>
-                        <Text 
-                            fontSize="11px" mt={1} fontWeight="600">
-                          <FontAwesomeIcon
-                            icon={faCheck}
-                            fontSize="13px"
-                            color="teal"
-                            />{" "}
-                          Appointment Date <strong>
-                            {new Date(item.appointmentDate).toDateString()}
-                          </strong>
-                        </Text>
-                            </Box>
-                            <Box>
                             <Text
-                            fontSize="11px" mt={1} fontWeight="600">
-                            <FontAwesomeIcon
-                            icon={faCheck}
-                            fontSize="13px"
-                            color="teal"
-                            />{" "}
-                            Patients 
-                        </Text>
-                        <Button
-                        onClick={() => {
+                              fontSize="11px" mt={1} fontWeight="600">
+                              <FontAwesomeIcon
+                                icon={faCheck}
+                                fontSize="13px"
+                                color="teal"
+                              />{" "}
+                              Booking Date <strong>
+                                {new Date(item.bookedDate).toDateString()}
+                              </strong>
+                            </Text>
+                            <Text
+                              fontSize="11px" mt={1} fontWeight="600">
+                              <FontAwesomeIcon
+                                icon={faCheck}
+                                fontSize="13px"
+                                color="teal"
+                              />{" "}
+                              Appointment Date <strong>
+                                {new Date(item.appointmentDate).toDateString()}
+                              </strong>
+                            </Text>
+                          </Box>
+                          <Box>
+                            <Text
+                              fontSize="11px" mt={1} fontWeight="600">
+                              <FontAwesomeIcon
+                                icon={faCheck}
+                                fontSize="13px"
+                                color="teal"
+                              />{" "}
+                              Patients
+                            </Text>
+                            <Button
+                              onClick={() => {
 
-                            if(item.patients === 1){
-                                toast({
+                                if (item.patients === 1) {
+                                  toast({
                                     title: `${item?.testId.testName} `,
                                     description: "Minimum 1 patient required.",
                                     status: "warning",
                                     duration: 3000,
                                     isClosable: true,
                                     position: "top",
-                                    });
-                                return;
-                            }
-                            dispatch(updateLabcart(authState.user.id, item._id, item.patients - 1))
-                            toast({
-                                title: `${item?.testId.testName} `,
-                                description: "Removed a patient.",
-                                status: "success",
-                                duration: 3000,
-                                isClosable: true,
-                                position: "top",
+                                  });
+                                  return;
+                                }
+                                dispatch(updateLabcart(loginCredential._id, item._id, item.patients - 1))
+                                toast({
+                                  title: `${item?.testId.testName} `,
+                                  description: "Removed a patient.",
+                                  status: "success",
+                                  duration: 3000,
+                                  isClosable: true,
+                                  position: "top",
                                 });
-                        }}
-                        fontSize={'30px'}>
-                            -
-                        </Button>
-                        <Button bg='none' 
-                        _hover={{bg:'none'}}>
-                           {
+                              }}
+                              fontSize={'30px'}>
+                              -
+                            </Button>
+                            <Button bg='none'
+                              _hover={{ bg: 'none' }}>
+                              {
                                 item.patients
-                           }
-                        </Button>
-                        <Button fontSize={'30px'}
-                        onClick={() => {
-                            dispatch(updateLabcart(authState.user.id, item._id, item.patients + 1))
-                            toast({
-                                title: `${item?.testId.testName} `,
-                                description: "Added a patient.",
-                                status: "success",
-                                duration: 3000,
-                                isClosable: true,
-                                position: "top",
+                              }
+                            </Button>
+                            <Button fontSize={'30px'}
+                              onClick={() => {
+                                dispatch(updateLabcart(loginCredential._id, item._id, item.patients + 1))
+                                toast({
+                                  title: `${item?.testId.testName} `,
+                                  description: "Added a patient.",
+                                  status: "success",
+                                  duration: 3000,
+                                  isClosable: true,
+                                  position: "top",
                                 });
-                        }}
-                        >
-                            +
-                        </Button>
-                                </Box>
-                            </Flex>
+                              }}
+                            >
+                              +
+                            </Button>
+                          </Box>
+                        </Flex>
                       </Box>
                     </Box>
                   </Box>
                 ))}
               </GridItem>
               <GridItem colSpan={{ base: 5, md: 2 }}>
-               
-               
-                   
+
+
+
                 <Box
                   mt={4}
                   bg="white"
@@ -268,14 +267,14 @@ function Cart() {
                     </Text>
                     <Text fontSize="14px" fontWeight="thin">
 
-                     ₹ {state.reduce((acc, item) => acc + (item.testId.price*item.patients), 0)}
+                      ₹ {state.reduce((acc, item) => acc + (item.testId.price * item.patients), 0)}
                     </Text>
                   </Flex>
                   <Flex justifyContent="space-between" mt={3}>
-                   
-                    
+
+
                   </Flex>
-                  
+
                   <Flex justifyContent="space-between" mt={3}>
                     <Text fontSize="14px" fontWeight="thin">
                       Convenience Fee
@@ -297,7 +296,7 @@ function Cart() {
                       Total MRP
                     </Text>
                     <Text fontSize="14px" fontWeight="bold">
-                    ₹ {state.reduce((acc, item) => acc + (item.testId.price*item.patients), 0)}
+                      ₹ {state.reduce((acc, item) => acc + (item.testId.price * item.patients), 0)}
                     </Text>
                   </Flex>
                   <Button
@@ -328,7 +327,7 @@ function Cart() {
                           my={4}
                           colorScheme="green"
                           onClick={() => {
-                            dispatch(testBooking(authState.user.id));
+                            dispatch(testBooking(loginCredential._id));
                             toast({
                               title: "Booking Confirmed",
                               description:
@@ -338,7 +337,7 @@ function Cart() {
                               position: "top",
                               isClosable: true,
                             });
-                            
+
                             OnClose();
                           }}
                         >
