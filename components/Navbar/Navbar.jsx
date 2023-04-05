@@ -50,14 +50,14 @@ export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
   const dispatch = useDispatch();
   const { data } = useSelector(state => state.cart)
-  const { loading, error, isAuth, message, tokenDetails, errorMessage,loginCredential } = useSelector((store) => store.user);
+  const { isAuth, tokenDetails, errorMessage, loginCredential } = useSelector((store) => store.user);
   console.log('loginCredential FROM NAVBAR:', loginCredential)
   useEffect(() => {
     if (tokenDetails) {
       dispatch({ type: SAVE_CREDENTIAL, payload: tokenDetails })
       dispatch(getCart(tokenDetails._id))
     }
-    
+
   }, [tokenDetails])
 
   useEffect(() => {
@@ -188,7 +188,8 @@ export default function Navbar() {
             <Link href="/medicines">Medicines</Link>
           </Heading>
           <Heading fontWeight={500} size="xs">
-            <Link href="#">Lab Tests</Link>
+            {/* <Link href="#">Lab Tests</Link> */}
+            Lab Tests
           </Heading>
           <Heading fontWeight={500} size="xs">
             <Menu>

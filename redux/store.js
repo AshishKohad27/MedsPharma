@@ -9,9 +9,9 @@ import {
 } from 'redux';
 import { cartReducer } from './cart/reducer';
 import { productReducer } from './product/reducer';
+import { userReducer } from './auth/user.reducer';
 
 import thunk from 'redux-thunk';
-import { userReducer } from './auth/user.reducer';
 
 const rootReducer = combineReducers({
     
