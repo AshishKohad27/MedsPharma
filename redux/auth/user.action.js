@@ -36,8 +36,8 @@ export const postLogin = (payload) => async (dispatch) => {
         );
         dispatch({ type: LOGIN_SUCCESS, payload: res.data });
     } catch (e) {
-        console.log("e:", e.response.data.desc);
-        dispatch({ type: LOGIN_ERROR, payload: e.response.data.desc });
+        console.log("e:", e.response.data.message);
+        dispatch({ type: LOGIN_ERROR, payload: e.response.data.message });
     }
 };
 

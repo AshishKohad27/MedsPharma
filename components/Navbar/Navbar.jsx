@@ -16,53 +16,73 @@ import {
   Tab,
   TabPanels,
   TabPanel,
-  Img
-
+  Img,
+  useToast,
 } from "@chakra-ui/react";
 
 import Login from "../SignIn/Login";
-import {
-  HamburgerIcon,
-  CloseIcon,
-  ChevronDownIcon,
-} from "@chakra-ui/icons";
+import { HamburgerIcon, CloseIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { FaRegUser } from "react-icons/fa";
 import { BsCart2 } from "react-icons/bs";
 import Link from "next/link";
 
-
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-} from "@chakra-ui/react";
+import { Menu, MenuButton, MenuList } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { LOGOUT, SAVE_CREDENTIAL } from "../../redux/auth/user.type";
+import {
+  CLEAR_MESSAGE,
+  LOGOUT,
+  SAVE_CREDENTIAL,
+} from "../../redux/auth/user.type";
 import { useEffect } from "react";
 import { getDetailsFromToken } from "../../redux/auth/user.action";
 import { getCart } from "../../redux/cart/action";
+import SignUp from "../SignUp/SignUp";
 
 const SendToken = {
   token: "",
 };
 
 export default function Navbar() {
+  const toast = useToast();
   const { isOpen, onToggle } = useDisclosure();
   const dispatch = useDispatch();
-  const { data } = useSelector(state => state.cart)
-  const { isAuth, tokenDetails, errorMessage, loginCredential } = useSelector((store) => store.user);
-  console.log('loginCredential FROM NAVBAR:', loginCredential)
+  const { data } = useSelector((state) => state.cart);
+  const { isAuth, tokenDetails, errorMessage, loginCredential, message } =
+    useSelector((store) => store.user);
+  // console.log('loginCredential FROM NAVBAR:', loginCredential)
+  console.log("message from Signup:", message);
+
+  useEffect(() => {
+    if (message === "Login Successfully!") {
+      toast({
+        title: message,
+        status: "success",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+      dispatch({ type: CLEAR_MESSAGE });
+    } else if (message === "User Created Successfully!") {
+      toast({
+        title: message,
+        status: "success",
+        position: "top",
+        duration: 3000,
+        isClosable: true,
+      });
+      dispatch({ type: CLEAR_MESSAGE });
+    }
+  }, [message]);
   useEffect(() => {
     if (tokenDetails) {
-      dispatch({ type: SAVE_CREDENTIAL, payload: tokenDetails })
-      dispatch(getCart(tokenDetails._id))
+      dispatch({ type: SAVE_CREDENTIAL, payload: tokenDetails });
+      dispatch(getCart(tokenDetails._id));
     }
-
-  }, [tokenDetails])
+  }, [tokenDetails]);
 
   useEffect(() => {
     SendToken.token = localStorage.getItem("access_token");
-    console.log('SendToken:', SendToken)
+    console.log("SendToken:", SendToken);
     dispatch(getDetailsFromToken(SendToken));
   }, [isAuth, dispatch]);
 
@@ -142,12 +162,11 @@ export default function Navbar() {
             <Box display="flex" gap={{ base: 0, md: 3 }}>
               <Text mt="5px">
                 <FaRegUser />
-
               </Text>
               {/* {isAuth ? <Box><Button onClick={()=>dispatch({ type: LOGOUT })}>Logout</Button></Box> : <Login />} */}
-              <Login />
+              <Login /> <SignUp />
             </Box>
-            <Link href='/carts'>
+            <Link href="/carts">
               <Box display="flex" gap={2}>
                 <Text mt="5px">
                   <BsCart2 />
@@ -163,7 +182,18 @@ export default function Navbar() {
                 >
                   Cart
                 </Button>
-                <Flex bg='red' w={'25px'} h="25px" borderRadius='50%' color='white' position={'absolute'} alignItems='center' justifyContent='center' mr={'-20px'} mt={'-20px'}>
+                <Flex
+                  bg="red"
+                  w={"25px"}
+                  h="25px"
+                  borderRadius="50%"
+                  color="white"
+                  position={"absolute"}
+                  alignItems="center"
+                  justifyContent="center"
+                  mr={"-20px"}
+                  mt={"-20px"}
+                >
                   {data && data.length}
                 </Flex>
               </Box>
@@ -207,19 +237,19 @@ export default function Navbar() {
                 <Box p={10} w="850px" m="auto">
                   <Tabs>
                     <TabList>
-                      <Link href='/products?category=homecare'>
+                      <Link href="/products?category=homecare">
                         <Tab>Home care</Tab>
                       </Link>
-                      <Link href='/products?category=skincare'>
+                      <Link href="/products?category=skincare">
                         <Tab>Skin care</Tab>
                       </Link>
-                      <Link href='/products?category=personalcare'>
+                      <Link href="/products?category=personalcare">
                         <Tab>Personal care</Tab>
                       </Link>
-                      <Link href='/products?category=healthcare'>
+                      <Link href="/products?category=healthcare">
                         <Tab>Health care</Tab>
                       </Link>
-                      <Link href='/products?category=food&drinks'>
+                      <Link href="/products?category=food&drinks">
                         <Tab>Health Food & Drinks</Tab>
                       </Link>
                     </TabList>
@@ -232,7 +262,9 @@ export default function Navbar() {
                           <Box mt={4}>Glade Touch & Fresh Lemon Refill </Box>
                         </Link>
                         <Link href="/products?category=homecare">
-                          <Box mt={4}>Nimwash Vegetable & Fruit Wash Spray </Box>
+                          <Box mt={4}>
+                            Nimwash Vegetable & Fruit Wash Spray{" "}
+                          </Box>
                         </Link>
                       </TabPanel>
                       <TabPanel>
@@ -314,13 +346,7 @@ const DesktopNav = () => {
   return (
     <>
       <Stack direction={"row"} spacing={4}>
-        <Box
-          ml={-7}
-          mt="10px"
-          bg="#8897a2"
-          h="35px"
-          w="1px"
-        ></Box>
+        <Box ml={-7} mt="10px" bg="#8897a2" h="35px" w="1px"></Box>
         <Box pt="15px" fontSize="14px" display="flex">
           <Img
             mt="3px"
@@ -418,29 +444,18 @@ const MobileNavItem = ({ label, children, href }) => {
         )}
       </Flex>
 
-      <Collapse
-        in={isOpen}
-        animateOpacity
-        style={{ marginTop: "0!important" }}
-      >
+      <Collapse in={isOpen} animateOpacity style={{ marginTop: "0!important" }}>
         <Stack
           mt={2}
           pl={4}
           borderLeft={1}
           borderStyle={"solid"}
-          borderColor={useColorModeValue(
-            "gray.200",
-            "gray.700"
-          )}
+          borderColor={useColorModeValue("gray.200", "gray.700")}
           align={"start"}
         >
           {children &&
             children.map((child) => (
-              <Link
-                key={child.label}
-                py={2}
-                href={child.href}
-              >
+              <Link key={child.label} py={2} href={child.href}>
                 {child.label}
               </Link>
             ))}

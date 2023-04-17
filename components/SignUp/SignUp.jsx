@@ -34,16 +34,17 @@ import {
   LOGOUT,
   SAVE_CREDENTIAL,
 } from "../../redux/auth/user.type";
-import { getDetailsFromToken, postLogin } from "../../redux/auth/user.action";
+import { getDetailsFromToken, postLogin, postSign } from "../../redux/auth/user.action";
 import axios from "axios";
 let initState = {
+  name: "",
   email: "",
   password: "",
 };
 const SendToken = {
   token: "",
 };
-function Login() {
+function SignUp() {
   const [isAuthUser, steIsAuthUser] = useState(false); // to prevent form hydration in next js
   const [form, setForm] = useState(initState);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -51,9 +52,9 @@ function Login() {
   const { loading, error, isAuth, message, tokenDetails, errorMessage } =
     useSelector((store) => store.user);
   // console.log('loginCredential:', loginCredential)
-  console.log("errorMessage:", errorMessage);
+  // console.log('tokenDetails:', tokenDetails)
   // console.log('loading Login:', loading)
-  console.log("message Login:", loading);
+//   console.log('message Login:', message)
 
   useEffect(() => {
     if (tokenDetails) {
@@ -78,14 +79,13 @@ function Login() {
   }, [isAuth]);
 
   useEffect(() => {
-    if (message === "Wrong Credentials" || errorMessage === "Error Occurs") {
+    if (message === "Wrong Credentials") {
       form.email = "";
       form.password = "";
-      console.log("Wrong Credentials");
-      alert("Wrong Credentials");
+      alert(message);
       dispatch({ type: CLEAR_MESSAGE });
     }
-  }, [loading, error, isAuth, dispatch, form, message, errorMessage]);
+  }, [loading, error, isAuth, dispatch, form, message]);
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -100,7 +100,7 @@ function Login() {
       alert("Please Fill All Details");
     } else {
       dispatch({ type: CLEAR_MESSAGE }); // CLEAR ERROR MESSAGE AND MESSAGE IN FROM REDUX
-      dispatch(postLogin(form));
+      dispatch(postSign(form));
       onClose();
     }
     // console.log("email:", form.email, "password:", form.password)
@@ -111,22 +111,15 @@ function Login() {
       <div>
         <div id="recaptcha-container"></div>
         <Menu variant="ghost">
-          {isAuthUser ? (
-            <LogoutFunction name={tokenDetails && tokenDetails.name} />
-          ) : (
-            <MenuButton
-              _hover={{ color: "red" }}
-              w="28"
-              fontSize={"18"}
-              righticon={<ChevronDownIcon />}
-              onClick={onOpen}
-            >
-              Login
-            </MenuButton>
-          )}
-          <MenuList>
-            <MenuItem onClick={() => {}}>Sign Out</MenuItem>
-          </MenuList>
+          <MenuButton
+            _hover={{ color: "red" }}
+            w="28"
+            fontSize={"18"}
+            righticon={<ChevronDownIcon />}
+            onClick={onOpen}
+          >
+            Signup
+          </MenuButton>
         </Menu>
 
         <Drawer size="sm" isOpen={isOpen} placement="right" onClose={onClose}>
@@ -158,10 +151,23 @@ function Login() {
               <Stack spacing="24px">
                 <Box>
                   <FormLabel fontWeight={"bold"} mb="30px">
-                    Quick Login
+                    Register
                   </FormLabel>
 
                   <Input
+                    _focus={{
+                      border: "1px solid #10847E",
+                    }}
+                    onChange={handleChange}
+                    name="name"
+                    value={form.name}
+                    height={"50px"}
+                    placeholder="Name"
+                    autoComplete="off"
+                  />
+
+                  <Input
+                    mt="10px"
                     _focus={{
                       border: "1px solid #10847E",
                     }}
@@ -199,7 +205,7 @@ function Login() {
                       color: "white",
                     }}
                   >
-                    Login
+                    Signup
                   </Button>
                 </Box>
               </Stack>
@@ -233,4 +239,4 @@ function LogoutFunction({ name }) {
   );
 }
 
-export default Login;
+export default SignUp;
