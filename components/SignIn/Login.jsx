@@ -213,6 +213,10 @@ function Login() {
 
 function LogoutFunction({ name }) {
   const dispatch = useDispatch();
+  const handelLogout = () => {
+    dispatch({ type: LOGOUT });
+    dispatch({ type: CLEAR_MESSAGE });
+  };
   return (
     <Flex w="160px" justifyContent="center" alignItems="center">
       <Box>
@@ -224,7 +228,7 @@ function LogoutFunction({ name }) {
           color={"red.400"}
           fontWeight={500}
           cursor="pointer"
-          onClick={() => dispatch({ type: LOGOUT })}
+          onClick={() => handelLogout()}
         >
           Logout
         </Text>
